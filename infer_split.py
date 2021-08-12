@@ -26,7 +26,8 @@ from pycocotools.coco import COCO
 from pycocotools.cocoeval import COCOeval, Params
 from config import cfg
 import cv2
-from PIL import Image
+import random
+from PIL import Image, ImageFont
 from PIL import ImageDraw
 paddle.enable_static()
 
@@ -44,27 +45,22 @@ path = 'freezed_model'  # 'model/freeze_model'
 
 
 def draw_bbox_image(img, boxes, labels, scores,label_names,thre,gt=False):
-    """
-    给图片画上外接矩形框
-    :param img:
-    :param boxes:
-    :param save_name:
-    :param labels
-    :return:
-    """
-    color = ['red', 'blue']
-    if gt:
-        c = color[1]
-    else:
-        c = color[0]
+    color = ['FF3838', 'FF9D97', 'FF701F', 'FFB21D', 'CFD231', '48F90A', '92CC17', '3DDB86', '1A9334', '00D4BB',
+               '2C99A8', '00C2FF', '344593', '6473FF', '0018EC', '8438FF', '520085', 'CB38FF', 'FF95C8', 'FF37C7']
+    
     img = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     draw = ImageDraw.Draw(img)
+    line_thickness = max(int(min(img.size) / 200), 2)
+    font = ImageFont.truetype("Arial.ttf", size=max(round(max(img.size) / 40), 12))
+
     for box, label,score in zip(boxes, labels, scores):
         if score >= thre:#thre
+            c = random.randint(0,19)
             xmin, ymin, xmax, ymax = box[0], box[1], box[2], box[3]
-            draw.rectangle((xmin, ymin, xmax, ymax), None, c, width=3)
-            draw.text((xmin, ymin), label_names[int(label)], (255, 255, 0))
-        
+            draw.rectangle((xmin, ymin, xmax, ymax), None, "#" + color[c], width=line_thickness)
+            draw.text(( xmin + 5, ymin + 5), 
+                        label_names[int(label)] + ' ' + str(round(score * 100, 2)) + "%", 
+                        "#" + color[c], font=font)
     return img
 
 def read_image(img):
