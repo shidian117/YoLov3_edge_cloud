@@ -28,9 +28,18 @@ The exported models are stored in freezed/model
 Finally, you can use infer_completed.py to infer the completed model (with prune or without prune), use infer_split.py to infer the split model (with prune or without prune).
 
 ## Models
-# complete_model
+### complete_model
 The pre-trained completed model
-# pruned_model
+### pruned_model
 The pre-trained pruned model
-# freezed_model
+### freezed_model
+The freezed model for inference stage
+#### quantized_model
+True int8/16 quantized model
+#### test_model
+Fake int8/16 quantized model. The model is still stored with data type fp32.
+1. completed_model/completed_params : original model
+2. completed_pruned_model/completed_pruned_params : pruned model
+3. split_client(server)_model/split_client(server)_params : splited model
+4. split_pruned_client(server)_model/split_pruned_client(server)_params : splited and pruned model
 
