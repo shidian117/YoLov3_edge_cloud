@@ -11,7 +11,8 @@ This project focuses on edge-cloud collaborative object detection inference, whi
 - After having the pre-trained model, you can train your pruned model with fine-tuning operations using train_prune.py. You can change the pruning ratio and choose the pruning layers. We have finished training one pruned model, which is stored in pruned_model/model_final1.
 
 ## Evaluation
-You can use eval.py to evaluate the completed model and use eval_prune.py to evaluate the pruned model.
+You can use eval.py to evaluate the completed model and use eval_prune.py to evaluate the pruned model with the "training" type.
+You can use eval_infer.py to evaluate the completed model and use eval_infer_split.py to evaluate the splited model with the "inference" type.
 
 
 ## Model Export
@@ -21,6 +22,7 @@ You can use eval.py to evaluate the completed model and use eval_prune.py to eva
 - export_client.py and export_server.py:  split the completed model into the client model and the server model(with split and without prune)
 - export_client_pruned.py and export_server_pruned.py:  split the completed and pruned model into the client model and the server model (with split and prune)
 The exported models are stored in freezed/model
+- export_quant.py:  export the true quantized model (int 8/16) and the fake quantized model (fp32)
 
 ## Model Inference
 Finally, you can use infer_completed.py to infer the completed model (with prune or without prune), use infer_split.py to infer the split model (with prune or without prune).
