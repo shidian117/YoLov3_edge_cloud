@@ -27,3 +27,10 @@ The exported models are stored in freezed/model
 ## Model Inference
 Finally, you can use infer_completed.py to infer the completed model (with prune or without prune), use infer_split.py to infer the split model (with prune or without prune).
 
+## Models
+# complete_model
+The pre-trained completed model
+# pruned_model
+The pre-trained pruned model
+# freezed_model
+
