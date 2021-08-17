@@ -26,6 +26,7 @@ The exported models are stored in freezed/model
 
 ## Model Inference
 Finally, you can use infer_completed.py to infer the completed model (with prune or without prune), use infer_split.py to infer the split model (with prune or without prune).
+Or you can convert the quantized model to the .nb style and infer it by the infer_split_lite.py file.
 
 ## Models
 ### complete_model
