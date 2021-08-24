@@ -90,7 +90,7 @@ def edge_load_model_yolo(model_path, img_dir, img_name):
     start_time = time.time()
 
     config1 = MobileConfig()
-    config1.set_model_from_file("quant_split_pruned_opt8.nb")
+    config1.set_model_from_file(model_path)
     image_shape, tensor_image = image_preprocess_yolo(os.path.join(img_dir, img_name))
     predictor = create_paddle_predictor(config1)
     input_tensor = predictor.get_input(0)
@@ -110,8 +110,8 @@ def cloud_load_tensor_yolo(image_shape, tensor, model_path, img_dir,img_name):
     start_time = time.time()
 
     client = Client()
-    client.load_client_config("serving_client/serving_client_conf.prototxt")
-    client.connect(["127.0.0.1:9292"])
+    client.load_client_config(model_path)
+    client.connect(["127.0.0.1:9393"])
     # 自适应输入tensor
     feed = {}
     feed_target_names = ['image1','image2','image_shape']
@@ -119,11 +119,11 @@ def cloud_load_tensor_yolo(image_shape, tensor, model_path, img_dir,img_name):
     for index, t in enumerate(tensor):
         feed[feed_target_names[index]] = t[0]
     feed[feed_target_names[-1]] = image_shape#image_shape[np.newaxis, :]
-    print(feed['image1'])
-    print(feed['image_shape'])
+    #print(feed['image1'])
+    #print(feed['image_shape'])
     
     outputs = client.predict(feed=feed, fetch=["save_infer_model/scale_0.tmp_0"],batch=False)
-    print(outputs['save_infer_model/scale_0.tmp_0'])
+    #print(outputs['save_infer_model/scale_0.tmp_0'])
     
     
     bboxes = np.array(outputs['save_infer_model/scale_0.tmp_0'])
@@ -143,52 +143,10 @@ def cloud_load_tensor_yolo(image_shape, tensor, model_path, img_dir,img_name):
     end_time = time.time()
     return output_dir,round(end_time - start_time, 3)
 
-def edge_load_model(path_prefix,img):
-    paddle.enable_static()
-    startup_prog = paddle.static.default_startup_program()
-    start_time = time.time()
-
-    exe = paddle.static.Executor(paddle.CPUPlace())
-    exe.run(startup_prog)
-
-    [inference_program, feed_target_names, fetch_targets] = (
-        paddle.static.load_inference_model(path_prefix, exe))
-
-    results = exe.run(inference_program,
-              feed={feed_target_names[0]: image_preprocess(img)},
-              fetch_list=fetch_targets)
-    end_time = time.time()
-    return np.array(results[0]), round(end_time - start_time, 3)
-
-def cloud_load_tensor(path_prefix, tensor):
-    paddle.enable_static()
-    startup_prog = paddle.static.default_startup_program()
-    start_time = time.time()
-
-    exe = paddle.static.Executor(paddle.CPUPlace())
-    exe.run(startup_prog)
-
-    [inference_program, feed_target_names, fetch_targets] = (
-        paddle.static.load_inference_model(path_prefix, exe))
-
-    results = exe.run(inference_program,
-              feed={feed_target_names[0]: tensor},
-              fetch_list=fetch_targets)
-    result = results[0].tolist()
-    end_time = time.time()
-    return [result[i].index(max(result[i])) for i in range(len(result))], round(end_time - start_time, 3)
-
-
 if __name__ == "__main__":
-    # tensor,edge_infer_time = edge_load_model(
-    #     path_prefix="../data/send/model/client_infer_resnet18_cifar10",
-    #     img="../data/test/air.jpeg")
-
-    # result,cloud_infer_time = cloud_load_tensor(
-    #     path_prefix="../data/send/model/server_infer_resnet18_cifar10",tensor=tensor)
-    # print(result)
+    
     image_shape, results = edge_load_model_yolo(
-            model_path="./data/send/client_infer_yolov3", 
+            model_path="edge_model/client_opt.nb", 
             img_dir="test/",
             img_name = "kite.jpg")
     
@@ -198,7 +156,7 @@ if __name__ == "__main__":
     output, cloud_infer_time  = cloud_load_tensor_yolo(
             image_shape=image_shape, 
             tensor=results, 
-            model_path="./model_server/server",
+            model_path="serving_client/serving_client_conf.prototxt",
             img_dir="test/",
             img_name="kite.jpg")
     print("Result saved in " + output)
