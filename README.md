@@ -8,7 +8,7 @@ This project focuses on edge-cloud collaborative object detection inference, whi
 
 ## Training
 - If you want to train the model from scratch, run train.py with ```python3 train.py```. We have the pre-trained model, which is stored in complete_model/model_final
-- After having the pre-trained model, you can train your pruned model with fine-tuning operations using train_prune.py. You can change the pruning ratio and choose the pruning layers. We have finished training one pruned model, which is stored in pruned_model/model_final1.
+- After having the pre-trained model, you can train your pruned model with fine-tuning operations using ```train_prune.py```. You can change the pruning ratio and choose the pruning layers. We have finished training one pruned model, which is stored in pruned_model/model_final.
 
 ## Evaluation
 You can use eval.py to evaluate the completed model and use eval_prune.py to evaluate the pruned model with the "training" type.
