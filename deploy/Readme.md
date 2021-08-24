@@ -1,5 +1,5 @@
 # Model Deployment 
-main idea: Deploy the client(edge) model with Paddlelite, deploy the server(cloud) model with Paddle Serving
+Main idea: deploy the client(edge) model with Paddlelite, deploy the server(cloud) model with Paddle Serving
 
 ## Edge Model
 Convert the edge model with the following opt commands:
