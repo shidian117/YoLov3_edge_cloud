@@ -1,7 +1,7 @@
 # YoLov3_edge_cloud
 This project focuses on edge-cloud collaborative object detection inference, which is established based on PaddlePaddle YoLov3-DarkNet (https://github.com/PaddlePaddle/models/tree/release/1.4/PaddleCV/yolov3). 
 ## Prepare Steps
-1. Download the supported model parameters from: https://1drv.ms/u/s!AqK-Jk7aHxL8gUUhQN2Xqv7GQA0Z?e=G9rQFE
+1. Download the supported model parameters from: https://1drv.ms/u/s!AqK-Jk7aHxL8gUaizyJ6nxkpwMVy?e=PLo9tx
 2. Put the downloaded parameters into the main branch.
 3. Download the coco-2014 dataset with "cd dataset/coco"  "./download.sh"
 4. Set ```export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7``` to specify 8 GPU to train.
